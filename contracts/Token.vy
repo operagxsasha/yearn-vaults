@@ -5,20 +5,18 @@
 # https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md
 
 from vyper.interfaces import ERC20
-from vyper.interfaces import ERC20Detailed
 
 implements: ERC20
-implements: ERC20Detailed
 
 event Transfer:
     sender: indexed(address)
     receiver: indexed(address)
-    value: uint256
+    amount: uint256
 
 event Approval:
     owner: indexed(address)
     spender: indexed(address)
-    value: uint256
+    amount: uint256
 
 name: public(String[32])
 symbol: public(String[32])
@@ -37,7 +35,7 @@ def __init__(name: String[32], symbol: String[32]):
 
 
 @external
-def transfer(receiver : address, amount : uint256) -> bool:
+def transfer(receiver: address, amount: uint256) -> bool:
     self.balanceOf[msg.sender] -= amount
     self.balanceOf[receiver] += amount
     log Transfer(msg.sender, receiver, amount)
@@ -45,7 +43,7 @@ def transfer(receiver : address, amount : uint256) -> bool:
 
 
 @external
-def transferFrom(owner : address, receiver : address, amount : uint256) -> bool:
+def transferFrom(owner: address, receiver: address, amount: uint256) -> bool:
     self.balanceOf[owner] -= amount
     self.balanceOf[receiver] += amount
     self.allowance[owner][msg.sender] -= amount
@@ -54,7 +52,7 @@ def transferFrom(owner : address, receiver : address, amount : uint256) -> bool:
 
 
 @external
-def approve(spender : address, amount : uint256) -> bool:
+def approve(spender: address, amount: uint256) -> bool:
     self.allowance[msg.sender][spender] = amount
     log Approval(msg.sender, spender, amount)
     return True
