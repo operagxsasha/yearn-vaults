@@ -2,7 +2,7 @@ from ape import project, accounts, chain
 from pprint import pprint
 
 def main():
-    dev = accounts.test_accounts[0]
+    dev = accounts.load('sepolia')
     # deploy token
     token = project.Token.deploy('Yearn Test', 'YFI', sender=dev)
     token.mint(dev, '30000 ether', sender=dev)
@@ -14,6 +14,8 @@ def main():
     registry.newRelease(template, sender=dev)
     # create vault
     registry.newVault(token, dev, dev, 'Yearn Test Vault', 'yvYFI', sender=dev)
+    vault = project.Vault.at(registry.latestVault(token))
+    vault.setDepositLimit(token.totalSupply(), sender=dev)
     # deploy ypermit
     ypermit = project.YearnPermit.deploy(registry, sender=dev)
 
@@ -23,6 +25,6 @@ def main():
         'token': str(token),
         'registry': str(registry),
         'template': str(template),
-        'vault': str(registry.latestVault(token)),
+        'vault': str(vault),
         'ypermit': str(ypermit),
     })
