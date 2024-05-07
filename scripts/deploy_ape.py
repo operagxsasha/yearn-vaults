@@ -13,7 +13,7 @@ def main():
     # create release
     registry.newRelease(template, sender=dev)
     # create vault
-    vault = registry.newVault(token, dev, dev, 'Yearn Test Vault', 'yvYFI', sender=dev)
+    registry.newVault(token, dev, dev, 'Yearn Test Vault', 'yvYFI', sender=dev)
     # deploy ypermit
     ypermit = project.YearnPermit.deploy(registry, sender=dev)
 
@@ -23,6 +23,6 @@ def main():
         'token': str(token),
         'registry': str(registry),
         'template': str(template),
-        'vault': str(vault.return_value),
+        'vault': str(registry.latestVault(token)),
         'ypermit': str(ypermit),
     })
