@@ -57,7 +57,7 @@ permit2: immutable(Permit2)
 registry: immutable(Registry)
 
 @external
-def __init__(_registry: Registry):
+def __init__(_registry: address):
     permit2 = Permit2(0x000000000022D473030F116dDEE9F6B43aC78BA3)
     registry = Registry(_registry)
 
