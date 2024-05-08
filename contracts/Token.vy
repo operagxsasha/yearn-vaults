@@ -24,14 +24,13 @@ decimals: public(constant(uint256)) = 18
 balanceOf: public(HashMap[address, uint256])
 allowance: public(HashMap[address, HashMap[address, uint256]])
 totalSupply: public(uint256)
-minter: public(address)
+MAX_MINT: constant(uint256) = 100 * 10**18
 
 
 @external
 def __init__(name: String[32], symbol: String[32]):
     self.name = name
     self.symbol = symbol
-    self.minter = msg.sender
 
 
 @external
@@ -60,7 +59,7 @@ def approve(spender: address, amount: uint256) -> bool:
 
 @external
 def mint(receiver: address, amount: uint256) -> bool:
-    assert msg.sender == self.minter
+    assert amount <= MAX_MINT
     assert receiver != empty(address)
     self.totalSupply += amount
     self.balanceOf[receiver] += amount
